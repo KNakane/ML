@@ -9,11 +9,27 @@ class Dataset():
             dataset = datasets.load_boston()
             self.x = dataset['data']
             self.y = dataset['target']
+            self.out_dim = 1
         elif self.name == 'iris':
             dataset = datasets.load_iris()
             self.x = dataset['data']
             self.y = dataset['target']
-
+            self.out_dim = 3
+        elif self.name == 'diabetes':
+            dataset = datasets.load_diabetes()
+            self.x = dataset['data']
+            self.y = dataset['target']
+            self.out_dim = 1
+        elif self.name == 'digits':
+            dataset = datasets.load_digits(n_class=10)
+            self.x = dataset['data']
+            self.y = dataset['target']
+            self.out_dim = 10
+        elif self.name == 'linnerud':
+            dataset = datasets.load_linnerud()
+            self.x = dataset['data']
+            self.y = dataset['target']
+            self.out_dim = 3
         else:
             NotImplementedError()
 
