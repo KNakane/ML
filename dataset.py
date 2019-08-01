@@ -35,6 +35,7 @@ class Dataset():
 
     def load(self, test_size=0.2):
         X_train, X_test, y_train, y_test = train_test_split(self.x, self.y, test_size=test_size, random_state=0)
+        return (X_train, y_train), (X_test, y_test)
 
 if __name__ == "__main__":
     data = Dataset('boston')
