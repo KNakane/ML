@@ -1,5 +1,6 @@
 import os, sys
 import numpy as np
+import sklearn
 import sklearn.svm as sk
 from sklearn import linear_model
 
@@ -13,6 +14,9 @@ class Linear():
     def predict(self, x, y):
         return self.model.predict(x)
 
+    def loss(self, pred, grand_truth):
+        return np.sqrt(sklearn.metrics.mean_squared_error(grand_truth, pred))
+
 
 class SVR():
     def __init__(self, kernel='rbf', C=1e3, gamma=0.1):
@@ -23,3 +27,6 @@ class SVR():
 
     def predict(self, x, y):
         return self.model.predict(x)
+
+    def loss(self, pred, grand_truth):
+        return np.sqrt(sklearn.metrics.mean_squared_error(grand_truth, pred))

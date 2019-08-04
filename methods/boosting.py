@@ -1,7 +1,9 @@
 import os, sys
+import numpy as np
 import sklearn
 import xgboost as xgb
 import lightgbm as lgb
+import matplotlib.pyplot as plt
 
 class XGBoost():
     def __init__(self, n_class=0):
@@ -12,21 +14,27 @@ class XGBoost():
                 }
         else:
             self.params = {
-                'objective': 'multiclass', # 多値分類問題
-                'num_class': 3
+                "objective":"reg:linear",
+                'colsample_bytree': 0.3,
+                'learning_rate': 0.1,
+                'max_depth': 5,
+                'alpha': 10
                 }
     
     def train(self, x, y):
-        dtrain = xgb.DMatrix(x, label=y)
-        self.model = xgb.train(self.params, 
-                               dtrain, 
-                               early_stopping_rounds=10,
-                               num_boost_round=100)
+        #dtrain = xgb.DMatrix(x, label=y)
+        self.model = xgb.XGBRegressor()
+        self.model.fit(x, y)
 
-    def predict(self, x, y):
-        dtest = xgb.DMatrix(x, label=y)
-        return self.model.predict(dtest)
+    def predict(self, x):
+        return self.model.predict(x)
 
+    def loss(self, pred, grand_truth):
+        return np.sqrt(sklearn.metrics.mean_squared_error(grand_truth, pred))
+
+    def plot_tree(self):
+        xgb.plot_tree(self.model, num_trees=1)
+        plt.show()
 
 
 class LightGBM():
@@ -59,15 +67,16 @@ class LightGBM():
                         }
     
     def train(self, x, y):
-        self.dtrain = lgb.Dataset(x, y)
-        self.model = lgb.train(self.params, 
-                               self.dtrain, 
-                               early_stopping_rounds=10,
-                               num_boost_round=100)
+        #self.dtrain = lgb.Dataset(x, y)
+        self.model = lgb.LGBMRegressor()
+        self.model.fit(x, y)
 
-    def predict(self, x, y):
-        dtest = lgb.Dataset(x, y, reference=self.dtrain)
-        return self.model.predict(dtest)
+    def predict(self, x):
+        #dtest = lgb.Dataset(x, y, reference=self.dtrain)
+        return self.model.predict(x)
+
+    def loss(self, pred, grand_truth):
+        return np.sqrt(sklearn.metrics.mean_squared_error(grand_truth, pred))
 
 
 class catboost():
