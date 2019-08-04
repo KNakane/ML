@@ -19,15 +19,21 @@ def main(args):
     model.train(train_x, train_y)
 
     # Predict test data
-    train_logits = model.predict(train_x, train_y)
-    predict = model.predict(test_x, test_y)
+    train_logits = model.predict(train_x)
+    predict = model.predict(test_x)
+
+    # calculate rmse
+    train_rmse = model.loss(train_logits, train_y)
+    test_rmse = model.loss(predict, test_y)
+
+    print("Train RMSE : {}  Test RMSE : {}".format(train_rmse, test_rmse))
 
     plt.figure(figsize=[10, 5])
     plt.scatter(train_y, train_logits, c='r', label='train_data')
     plt.scatter(test_y, predict, c='g', label='test_data')
     plt.xlabel('grand truth')
     plt.ylabel('predict')
-    plt.title('Support Vector Regression')
+    plt.title('Regression')
     plt.legend()
     plt.show()
 
